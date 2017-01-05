@@ -2,6 +2,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
+*~
 
 # C extensions
 *.so
@@ -53,6 +54,12 @@ coverage.xml
 *.log
 local_settings.py
 
+cattlecrm
+db.sqlite3
+/static
+.DS_Store
+
+
 # Flask stuff:
 instance/
 .webassets-cache
@@ -87,3 +94,6 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+# VS Code Settings
+.vscode
