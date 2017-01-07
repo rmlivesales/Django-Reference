@@ -56,7 +56,7 @@ local_settings.py
 
 cattlecrm
 db.sqlite3
-/static
+# /static
 .DS_Store
 
 
