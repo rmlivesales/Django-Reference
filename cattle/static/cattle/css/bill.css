@@ -1,0 +1,25 @@
+.bill_table_left {
+    text-align: left;
+}
+
+.bill_table_right {
+    text-align: right;
+}
+
+.bill_table_center {
+    text-align: center;
+}
+
+.bill_table_gross {
+    font-weight: bold;
+    text-align: right;
+}
+
+.bill_table_disclaimer {
+    font-weight: normal;
+    text-align: justify;
+    padding-top: 3%;
+    padding-left: 20%;
+    padding-bottom: 3%;
+    padding-right: 20%;
+}

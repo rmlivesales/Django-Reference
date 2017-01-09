@@ -1,0 +1,202 @@
+{% load static %}
+
+<html>
+    <head>
+        <title>Rocky Mountain Livestock Sales, Inc.</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+        <script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+        <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+        <link href="http://pingendo.github.io/pingendo-bootstrap/themes/default/bootstrap.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" type="text/css" href="{% static 'cattle/css/bill.css' %}">
+    </head>
+    <body>
+        <div class="section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4">
+                        <a href="http://www.rockymtnlivestock.com/" class="text-center">
+                            <img src="{% static '/cattle/img/RMLSI_Logo.jpg' %}" class="img-responsive">
+                        </a>
+                    </div>
+                    <div class="col-md-4 hidden-xs">
+                        <p></p>
+                        <p class="lead text-center">P.O. Box 669
+                            <br>5005 East Hwy. 50
+                            <br>Salida, CO 81201, USA</p>
+                        <p></p>
+                    </div>
+                    <div class="col-md-4">
+                        <h2 class="text-center">Call us: (719)539-6647</h2>
+                    </div>
+                </div>
+                {% comment %}<div class="row">
+                </div>{% endcomment %}
+                <div class="row">
+                    <div class="col-md-12">
+                        <h1 class="text-center">
+                            <b>BILL OF SALE</b>
+                        </h1>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="lead text-center">
+                            <b>No. {{ bill.pk|stringformat:"05d" }}</b>
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="lead text-center">
+                            <b>Date: {{ bill.created_date.date|date:"M. d, Y" }}</b>
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p>For: {{ bill.buyer_brand.brand }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p>Address: {{ bill.buyer_brand.address }}&nbsp;
+                            <br>
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <!-- Big table -->
+                        <table class="table table-bordered table-condensed hidden-xs">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Seller</th>
+                                    <th class="text-center">Description</th>
+                                    <th class="text-center">No. Head</th>
+                                    <th class="text-center">Tag No.</th>
+                                    <th class="text-center">Pen No.</th>
+                                    <th class="text-center">Brand</th>
+                                    <th class="text-center">Weight</th>
+                                    <th class="text-center">Price CWT</th>
+                                    <th class="text-center">Price Head</th>
+                                    <th class="text-center">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-center">
+                                {% for p in purchases %}
+                                    <tr>
+                                        <td>{{ p.seller.brand }}</td>
+                                        <td class="bill_table_left">{{ p.description.short }}</td>
+                                        <td>{{ p.no_head }}</td>
+                                        <td>{{ p.tag_no }}</td>
+                                        <td>{{ p.pen_no }}</td>
+                                        <td class="bill_table_left">{{ p.brand.name }}</td>
+                                        <td class="bill_table_right">{{ p.weight }}</td>
+                                        <td class="bill_table_right">{{ p.price_cwt }}</td>
+                                        <td class="bill_table_right">{{ p.price_head|default:"" }}</td>
+                                        <td class="bill_table_right">{{ p.amount }}</td>
+                                    </tr>
+                                {% endfor %}
+                                <tr>
+                                    <td class="bill_table_gross" colspan="2">Total head:</td>
+                                    <td class="text-center">{{ heads }}</td>
+                                    <td class="bill_table_gross" colspan="3">Average weight & price:</td>
+                                    <td class="bill_table_gross">{{ av_weight }}</td>
+                                    <td class="bill_table_gross">{{ av_price|stringformat:"5.2f" }}</td>
+                                    <td class="bill_table_gross"></td>
+                                </tr>
+                                <tr>
+                                    <td class="bill_table_gross" colspan="3"></td>
+                                    <td class="bill_table_gross" colspan="3">Total weight:</td>
+                                    <td class="bill_table_gross">{{ weight }}</td>
+                                    <td class="bill_table_gross" colspan="2">Gross total:</td>
+                                    <td class="bill_table_gross">{{ amount }}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="7" rowspan="5" class="bill_table_disclaimer">
+                                        <div class="bill_table_disclaimer">
+                                            Our responsibility for accidents to stock ceases when stock leaves yard.
+                                            The purchaser agrees that the title to stock listed above shall be retained by us
+                                            until check or draft in payment for them is paid. We act as agents only.
+                                        <div>
+                                    </td>
+                                    <td class="bill_table_gross" colspan="2">Commission:</td>
+                                    <td class="bill_table_gross">{{ bill.commission|default:"" }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="bill_table_gross" colspan="2">Feed:</td>
+                                    <td class="bill_table_gross">{{ bill.feed|default:"" }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="bill_table_gross" colspan="2">Freight:</td>
+                                    <td class="bill_table_gross">{{ bill.freight|default:"" }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="bill_table_gross" colspan="2">Other:</td>
+                                    <td class="bill_table_gross">{{ bill.other|default:"" }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="bill_table_gross" colspan="2">TOTAL:</td>
+                                    <td class="bill_table_gross">{{ total }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <!-- Small table -->
+                        <table class="table table-bordered table-condensed hidden-lg hidden-md hidden-sm">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">No. Head</th>
+                                    <th class="text-center">Brand</th>
+                                    <th class="text-center">Weight</th>
+                                    <th class="text-center">Price CWT</th>
+                                    <th class="text-center">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-center">
+                                {% for p in purchases %}
+                                    <tr>
+                                        <td>{{ p.no_head }}</td>
+                                        <td class="bill_table_left">{{ p.brand.name }}</td>
+                                        <td class="bill_table_right">{{ p.weight }}</td>
+                                        <td class="bill_table_right">{{ p.price_cwt }}</td>
+                                        <td class="bill_table_right">{{ p.amount }}</td>
+                                    </tr>
+                                {% endfor %}
+                                <tr>
+                                    <td class="text-center">{{ heads }}</td>
+                                    <td class="bill_table_gross">Avg. w & p:</td>
+                                    <td class="bill_table_gross">{{ av_weight }}</td>
+                                    <td class="bill_table_gross">{{ av_price|stringformat:"5.2f" }}</td>
+                                    <td class="bill_table_gross"></td>
+                                </tr>
+                                <tr>
+                                    <td class="bill_table_gross" colspan="2">Total w & p:</td>
+                                    <td class="bill_table_gross">{{ weight }}</td>
+                                    <td class="bill_table_gross"></td>
+                                    <td class="bill_table_gross">{{ amount }}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" rowspan="5"></td>
+                                    <td class="bill_table_gross" colspan="2">Commission:</td>
+                                    <td class="bill_table_gross">{{ bill.commission|default:"" }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="bill_table_gross" colspan="2">Feed:</td>
+                                    <td class="bill_table_gross">{{ bill.feed|default:"" }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="bill_table_gross" colspan="2">Freight:</td>
+                                    <td class="bill_table_gross">{{ bill.freight|default:"" }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="bill_table_gross" colspan="2">Other:</td>
+                                    <td class="bill_table_gross">{{ bill.other|default:"" }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="bill_table_gross" colspan="2">TOTAL:</td>
+                                    <td class="bill_table_gross">{{ total }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div><div class="row"><div class="col-md-12"><h3><b>Buyer/Agent: _____________________________ {{ bill.buyer_agent }}</b></h3></div></div>
+            </div>
+        </div>
+    </body>
+</html>
